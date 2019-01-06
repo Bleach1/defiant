@@ -1,109 +1,184 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-void main() => runApp(new MyApp());
+import 'package:common_utils/common_utils.dart';
+import 'package:defiant/home.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+void main() {
+  runApp(new MyApp());
+  if (Platform.isAndroid) {
+    SystemUiOverlayStyle systemUiOverlayStyle =
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  }
+}
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'Flutter Demo',
-      theme: new ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or press Run > Flutter Hot Reload in IntelliJ). Notice that the
-        // counter didn't reset back to zero; the application is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: new MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: {
+        '/MainPage': (ctx) => MainTabPage(),
+      },
+      home: new SplashPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class SplashPage extends StatefulWidget {
+  SplashPage({Key key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => new _MyHomePageState();
+  _SplashPageState createState() => new _SplashPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _SplashPageState extends State<SplashPage> {
+  void _goMain() {
+    Navigator.of(context).pushReplacementNamed('/MainPage');
+  }
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+  @override
+  void initState() {
+    super.initState();
+    Future<bool> isFirst = get();
+    isFirst.then((isFirst) {
+      print(isFirst == true);
     });
+    countDown();
+  }
+
+  int currentCount = 5000;
+  int currentTime;
+
+  void countDown() {
+    var timer = new TimerUtil();
+    timer.setTotalTime(currentCount);
+    timer.setOnTimerTickCallback((time) {
+      setState(() {
+        currentTime = time ~/ 1000;
+        if (currentTime == 0) {
+          _goMain();
+          timer.cancel();
+        }
+      });
+    });
+    timer.startCountDown();
+  }
+
+  save() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("first", true);
+  }
+
+  Future<bool> get() async {
+    var first;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    first = prefs.getBool("first");
+    return first;
+  }
+
+  Widget _buildSplash() {
+    save();
+    return Stack(
+      alignment: Alignment.center,
+      fit: StackFit.expand,
+      children: <Widget>[
+        Image.asset(
+          "images/splash_logo.png",
+          fit: BoxFit.fitWidth,
+        ),
+        Positioned(
+          height: 25.0,
+          width: 80.0,
+          child: FlatButton(
+            onPressed: _goMain,
+            child: Text("Skip ${currentTime}s"),
+            shape: RoundedRectangleBorder(
+                side: new BorderSide(color: Theme.of(context).primaryColor),
+                borderRadius: BorderRadius.circular(20.0)),
+          ),
+          top: 35.0,
+          right: 15.0,
+        )
+      ],
+    );
+  }
+
+  Widget _buildBanner() {
+    final List<Widget> widgets = [];
+    var _pageController = new PageController(initialPage: 0);
+    widgets.add(Image.asset(
+      "images/guide1.png",
+      fit: BoxFit.fitWidth,
+    ));
+    widgets.add(Image.asset(
+      "images/guide2.png",
+      fit: BoxFit.fitWidth,
+    ));
+    widgets.add(Image.asset(
+      "images/guide3.png",
+      fit: BoxFit.fitWidth,
+    ));
+    widgets.add(Image.asset(
+      "images/guide4.png",
+      fit: BoxFit.fitWidth,
+    ));
+
+    return Scaffold(
+        body: PageView.builder(
+      itemBuilder: (context, index) {
+        return index == 3
+            ? Stack(
+                alignment: Alignment.center,
+                fit: StackFit.expand,
+                children: <Widget>[
+                  widgets[index],
+                  Positioned(
+                    bottom: 18.0,
+                    right: 18.0,
+                    child: RaisedButton(
+                      textTheme: ButtonTextTheme.normal,
+                      elevation: 5.0,
+                      color: Colors.redAccent,
+                      textColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0)),
+                      onPressed: () {
+                        _goMain();
+                      },
+                      child: Text("立即进入"),
+                    ),
+                  )
+                ],
+              )
+            : widgets[index];
+      },
+      onPageChanged: (index) {},
+      //onPageChanged: _pageChanged,
+      itemCount: 4,
+      scrollDirection: Axis.horizontal,
+
+      controller: _pageController,
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return new Scaffold(
-      appBar: new AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: new Text(widget.title),
+    return Material(
+      child: Stack(
+        children: <Widget>[
+          Offstage(
+            offstage: true,
+            child: _buildBanner(),
+          ),
+          Offstage(
+            offstage: false,
+            child: _buildSplash(),
+          ),
+        ],
       ),
-      body: new Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: new Column(
-          // Column is also layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug paint" (press "p" in the console where you ran
-          // "flutter run", or select "Toggle Debug Paint" from the Flutter tool
-          // window in IntelliJ) to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Text(
-              'You have pushed the button this many times:',
-            ),
-            new Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: new Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
