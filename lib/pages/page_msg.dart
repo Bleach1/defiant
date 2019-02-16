@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 class MsgPage extends StatefulWidget {
   @override
-  MsgPageState createState() => new MsgPageState();
+  MsgPageState createState() => MsgPageState();
 }
 
 class MsgPageState extends State<MsgPage> {
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('MsgPage'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('MsgPage'),
       ),
     );
   }

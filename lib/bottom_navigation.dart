@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:defiant/pages/page_home.dart';
 import 'package:defiant/pages/page_mine.dart';
 import 'package:defiant/pages/page_msg.dart';
+import 'package:flutter/material.dart';
 
 class BottomNavigation extends StatefulWidget {
   @override
-  BottomNavigationState createState() => new BottomNavigationState();
+  BottomNavigationState createState() => BottomNavigationState();
 }
 
 class BottomNavigationState extends State<BottomNavigation> {
@@ -14,16 +14,13 @@ class BottomNavigationState extends State<BottomNavigation> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       body: widgets[_currentPageIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: [
-          BottomNavigationBarItem(
-              icon: new Icon(Icons.home), title: new Text("首页")),
-          BottomNavigationBarItem(
-              icon: new Icon(Icons.message), title: new Text("消息")),
-          BottomNavigationBarItem(
-              icon: new Icon(Icons.person), title: new Text("我的")),
+          BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("首页")),
+          BottomNavigationBarItem(icon: Icon(Icons.message), title: Text("消息")),
+          BottomNavigationBarItem(icon: Icon(Icons.person), title: Text("我的")),
         ],
         currentIndex: _currentPageIndex,
         onTap: (index) {

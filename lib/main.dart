@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  runApp(new MyApp());
+  runApp(MyApp());
   if (Platform.isAndroid) {
     SystemUiOverlayStyle systemUiOverlayStyle =
         SystemUiOverlayStyle(statusBarColor: Colors.transparent);
@@ -18,11 +18,11 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
+    return MaterialApp(
       routes: {
         '/MainPage': (ctx) => MainTabPage(),
       },
-      home: new SplashPage(),
+      home: SplashPage(),
     );
   }
 }
@@ -31,7 +31,7 @@ class SplashPage extends StatefulWidget {
   SplashPage({Key key}) : super(key: key);
 
   @override
-  _SplashPageState createState() => new _SplashPageState();
+  _SplashPageState createState() => _SplashPageState();
 }
 
 class _SplashPageState extends State<SplashPage> {
@@ -53,7 +53,7 @@ class _SplashPageState extends State<SplashPage> {
   int currentTime;
 
   void countDown() {
-    var timer = new TimerUtil();
+    var timer = TimerUtil();
     timer.setTotalTime(currentCount);
     timer.setOnTimerTickCallback((time) {
       setState(() {
@@ -96,7 +96,7 @@ class _SplashPageState extends State<SplashPage> {
             onPressed: _goMain,
             child: Text("Skip ${currentTime}s"),
             shape: RoundedRectangleBorder(
-                side: new BorderSide(color: Theme.of(context).primaryColor),
+                side: BorderSide(color: Theme.of(context).primaryColor),
                 borderRadius: BorderRadius.circular(20.0)),
           ),
           top: 35.0,
@@ -108,7 +108,7 @@ class _SplashPageState extends State<SplashPage> {
 
   Widget _buildBanner() {
     final List<Widget> widgets = [];
-    var _pageController = new PageController(initialPage: 0);
+    var _pageController = PageController(initialPage: 0);
     widgets.add(Image.asset(
       "images/guide1.png",
       fit: BoxFit.fitWidth,

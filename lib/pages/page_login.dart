@@ -2,27 +2,28 @@ import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
   @override
-  LoginPageState createState() => new LoginPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
 class LoginPageState extends State<LoginPage> {
-  GlobalKey key = new GlobalKey<FormState>();
-  TextEditingController _nameController = new TextEditingController();
-  TextEditingController _pwdController = new TextEditingController();
+  GlobalKey key = GlobalKey<FormState>();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _pwdController = TextEditingController();
   bool onclick = false;
+
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Login'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login'),
       ),
-      body: new ListView(
+      body: ListView(
         children: <Widget>[
-          new Center(
+          Center(
             child: Padding(
                 padding: EdgeInsets.fromLTRB(15.0, 30.0, 15.0, 10.0),
                 child: Form(
-                  child: new Column(
+                  child: Column(
                     children: <Widget>[
                       TextFormField(
                           autofocus: true,
@@ -32,8 +33,8 @@ class LoginPageState extends State<LoginPage> {
                               labelText: "用户名",
                               hintText: "用户名或邮箱",
                               icon: Icon(Icons.person),
-                              suffixIcon: new IconButton(
-                                  icon: new Icon(
+                              suffixIcon: IconButton(
+                                  icon: Icon(
                                     Icons.clear,
                                     color: Colors.black45,
                                   ),
@@ -50,8 +51,8 @@ class LoginPageState extends State<LoginPage> {
                               labelText: "密码",
                               hintText: "您的登录密码",
                               icon: Icon(Icons.lock),
-                              suffixIcon: new IconButton(
-                                  icon: new Icon(
+                              suffixIcon: IconButton(
+                                  icon: Icon(
                                     onclick
                                         ? Icons.remove_red_eye
                                         : Icons.panorama_fish_eye,
@@ -67,7 +68,7 @@ class LoginPageState extends State<LoginPage> {
                           validator: (v) {
                             return v.trim().length > 5 ? null : "密码不能少于6位";
                           }),
-                      new Padding(
+                      Padding(
                         padding: EdgeInsets.only(top: 50.0),
                         child: Row(
                           children: <Widget>[
