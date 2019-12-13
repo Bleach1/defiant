@@ -39,14 +39,19 @@ class _SplashPageState extends State<SplashPage> {
     Navigator.of(context).pushReplacementNamed('/MainPage');
   }
 
+  var flag = false;
+
   @override
   void initState() {
     super.initState();
-    Future<bool> isFirst = get();
-    isFirst.then((isFirst) {
+    Future<bool> isFirstFlag = get();
+    isFirstFlag.then((isFirst) {
       print(isFirst == true);
+      flag = isFirst;
+      if (isFirst) {
+        countDown();
+      }
     });
-    countDown();
   }
 
   int currentCount = 5000;
@@ -80,14 +85,15 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Widget _buildSplash() {
-    save();
     return Stack(
       alignment: Alignment.center,
       fit: StackFit.expand,
       children: <Widget>[
         Image.asset(
           "images/splash_logo.png",
-          fit: BoxFit.fitWidth,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
         ),
         Positioned(
           height: 25.0,
@@ -107,23 +113,24 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Widget _buildBanner() {
+    save();
     final List<Widget> widgets = [];
     var _pageController = PageController(initialPage: 0);
     widgets.add(Image.asset(
       "images/guide1.png",
-      fit: BoxFit.fitWidth,
+      fit: BoxFit.cover,
     ));
     widgets.add(Image.asset(
       "images/guide2.png",
-      fit: BoxFit.fitWidth,
+      fit: BoxFit.cover,
     ));
     widgets.add(Image.asset(
       "images/guide3.png",
-      fit: BoxFit.fitWidth,
+      fit: BoxFit.cover,
     ));
     widgets.add(Image.asset(
       "images/guide4.png",
-      fit: BoxFit.fitWidth,
+      fit: BoxFit.cover,
     ));
 
     return Scaffold(
@@ -170,11 +177,11 @@ class _SplashPageState extends State<SplashPage> {
       child: Stack(
         children: <Widget>[
           Offstage(
-            offstage: true,
+            offstage: flag,
             child: _buildBanner(),
           ),
           Offstage(
-            offstage: false,
+            offstage: !flag,
             child: _buildSplash(),
           ),
         ],
