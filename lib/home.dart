@@ -41,11 +41,11 @@ class MainTabPageState extends State<MainTabPage> {
 
   _showDialog() {
     Fluttertoast.showToast(
+        fontSize: 16,
         msg: "This is Center Short Toast",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIos: 1,
-        backgroundColor: Colors.red,
         textColor: Colors.white);
   }
 }

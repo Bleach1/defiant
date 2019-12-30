@@ -5,14 +5,20 @@ import 'package:defiant/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:defiant/utils.dart';
 
 void main() {
   runApp(MyApp());
   if (Platform.isAndroid) {
     SystemUiOverlayStyle systemUiOverlayStyle =
-        SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+    SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
+
+  //自执行方法
+  (() {
+    print('我是自执行方法')
+  })();
 }
 
 class MyApp extends StatelessWidget {
@@ -24,6 +30,12 @@ class MyApp extends StatelessWidget {
       },
       home: SplashPage(),
     );
+  }
+
+  _test() {
+    add(0.1, 0.1);
+    add2(0.1, 0.1, discount: 0.2);
+    add3(0.1, 0.1, fun);
   }
 }
 
@@ -102,7 +114,9 @@ class _SplashPageState extends State<SplashPage> {
             onPressed: _goMain,
             child: Text("Skip ${currentTime}s"),
             shape: RoundedRectangleBorder(
-                side: BorderSide(color: Theme.of(context).primaryColor),
+                side: BorderSide(color: Theme
+                    .of(context)
+                    .primaryColor),
                 borderRadius: BorderRadius.circular(20.0)),
           ),
           top: 35.0,
@@ -135,40 +149,40 @@ class _SplashPageState extends State<SplashPage> {
 
     return Scaffold(
         body: PageView.builder(
-      itemBuilder: (context, index) {
-        return index == 3
-            ? Stack(
-                alignment: Alignment.center,
-                fit: StackFit.expand,
-                children: <Widget>[
-                  widgets[index],
-                  Positioned(
-                    bottom: 18.0,
-                    right: 18.0,
-                    child: RaisedButton(
-                      textTheme: ButtonTextTheme.normal,
-                      elevation: 5.0,
-                      color: Colors.redAccent,
-                      textColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
-                      onPressed: () {
-                        _goMain();
-                      },
-                      child: Text("立即进入"),
-                    ),
-                  )
-                ],
-              )
-            : widgets[index];
-      },
-      onPageChanged: (index) {},
-      //onPageChanged: _pageChanged,
-      itemCount: 4,
-      scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            return index == 3
+                ? Stack(
+              alignment: Alignment.center,
+              fit: StackFit.expand,
+              children: <Widget>[
+                widgets[index],
+                Positioned(
+                  bottom: 18.0,
+                  right: 18.0,
+                  child: RaisedButton(
+                    textTheme: ButtonTextTheme.normal,
+                    elevation: 5.0,
+                    color: Colors.redAccent,
+                    textColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)),
+                    onPressed: () {
+                      _goMain();
+                    },
+                    child: Text("立即进入"),
+                  ),
+                )
+              ],
+            )
+                : widgets[index];
+          },
+          onPageChanged: (index) {},
+          //onPageChanged: _pageChanged,
+          itemCount: 4,
+          scrollDirection: Axis.horizontal,
 
-      controller: _pageController,
-    ));
+          controller: _pageController,
+        ));
   }
 
   @override
