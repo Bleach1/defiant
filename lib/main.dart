@@ -2,31 +2,50 @@ import 'dart:io';
 
 import 'package:common_utils/common_utils.dart';
 import 'package:defiant/home.dart';
+import 'package:defiant/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:defiant/utils.dart';
 
 void main() {
   runApp(MyApp());
   if (Platform.isAndroid) {
     SystemUiOverlayStyle systemUiOverlayStyle =
-    SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
 
   //自执行方法
   (() {
-    print('我是自执行方法')
+    print('我是自执行方法');
   })();
 }
 
 class MyApp extends StatelessWidget {
+  final routes = {
+    '/MainPage': (ctx) => MainTabPage(),
+  };
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes: {
-        '/MainPage': (ctx) => MainTabPage(),
+      routes: routes,
+      onGenerateRoute: (RouteSettings settings) {
+        final String name = settings.name;
+        final Function pageContentBuilder = this.routes[name];
+        if (pageContentBuilder != null) {
+          if (settings.arguments != null) {
+            final Route route = MaterialPageRoute(
+                builder: (context) =>
+                    pageContentBuilder(context, arguments: settings.arguments));
+            return route;
+          } else {
+            final Route route = MaterialPageRoute(
+                builder: (context) => pageContentBuilder(context));
+            return route;
+          }
+        }
+        return null;
       },
       home: SplashPage(),
     );
@@ -48,7 +67,15 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   void _goMain() {
-    Navigator.of(context).pushReplacementNamed('/MainPage');
+    // Navigator.of(context).pop();
+    // Navigator.of(context).pushReplacementNamed('/MainPage');
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => MainTabPage()));
+    //替换理由+pop可以实现回到根路由
+    //Navigator.of(context).pushReplacementNamed("/替换路由跳转界面");
+   /* Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => MainTabPage()),
+        (route) => route == null);*/
   }
 
   var flag = false;
@@ -114,9 +141,7 @@ class _SplashPageState extends State<SplashPage> {
             onPressed: _goMain,
             child: Text("Skip ${currentTime}s"),
             shape: RoundedRectangleBorder(
-                side: BorderSide(color: Theme
-                    .of(context)
-                    .primaryColor),
+                side: BorderSide(color: Theme.of(context).primaryColor),
                 borderRadius: BorderRadius.circular(20.0)),
           ),
           top: 35.0,
@@ -149,40 +174,40 @@ class _SplashPageState extends State<SplashPage> {
 
     return Scaffold(
         body: PageView.builder(
-          itemBuilder: (context, index) {
-            return index == 3
-                ? Stack(
-              alignment: Alignment.center,
-              fit: StackFit.expand,
-              children: <Widget>[
-                widgets[index],
-                Positioned(
-                  bottom: 18.0,
-                  right: 18.0,
-                  child: RaisedButton(
-                    textTheme: ButtonTextTheme.normal,
-                    elevation: 5.0,
-                    color: Colors.redAccent,
-                    textColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0)),
-                    onPressed: () {
-                      _goMain();
-                    },
-                    child: Text("立即进入"),
-                  ),
-                )
-              ],
-            )
-                : widgets[index];
-          },
-          onPageChanged: (index) {},
-          //onPageChanged: _pageChanged,
-          itemCount: 4,
-          scrollDirection: Axis.horizontal,
+      itemBuilder: (context, index) {
+        return index == 3
+            ? Stack(
+                alignment: Alignment.center,
+                fit: StackFit.expand,
+                children: <Widget>[
+                  widgets[index],
+                  Positioned(
+                    bottom: 18.0,
+                    right: 18.0,
+                    child: RaisedButton(
+                      textTheme: ButtonTextTheme.normal,
+                      elevation: 5.0,
+                      color: Colors.redAccent,
+                      textColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0)),
+                      onPressed: () {
+                        _goMain();
+                      },
+                      child: Text("立即进入"),
+                    ),
+                  )
+                ],
+              )
+            : widgets[index];
+      },
+      onPageChanged: (index) {},
+      //onPageChanged: _pageChanged,
+      itemCount: 4,
+      scrollDirection: Axis.horizontal,
 
-          controller: _pageController,
-        ));
+      controller: _pageController,
+    ));
   }
 
   @override
