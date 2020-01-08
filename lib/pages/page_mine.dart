@@ -1,3 +1,5 @@
+import 'package:defiant/pages/page_tab_bar.dart';
+import 'package:defiant/pages/page_tab_bar2.dart';
 import 'package:flutter/material.dart';
 
 class MinePage extends StatefulWidget {
@@ -11,6 +13,15 @@ class MinePageState extends State<MinePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('MinePage'),
+      ),
+      body: Center(
+        child: RaisedButton(
+          child: Text('GO TO TAB'),
+          onPressed: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => TabBarPage2()));
+          },
+        ),
       ),
     );
   }
