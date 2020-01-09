@@ -1,6 +1,5 @@
 import 'package:defiant/bottom_navigation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class MainTabPage extends StatefulWidget {
   @override
@@ -40,12 +39,12 @@ class MainTabPageState extends State<MainTabPage> {
   }
 
   _showDialog() {
-    Fluttertoast.showToast(
+    /*Fluttertoast.showToast(
         fontSize: 16,
         msg: "This is Center Short Toast",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIos: 1,
-        textColor: Colors.white);
+        textColor: Colors.white);*/
   }
 }

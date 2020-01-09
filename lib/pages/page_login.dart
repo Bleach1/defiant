@@ -26,25 +26,30 @@ class LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: <Widget>[
                       TextFormField(
-                          autofocus: true,
-                          keyboardType: TextInputType.phone,
-                          controller: _nameController,
-                          decoration: InputDecoration(
-                              labelText: "用户名",
-                              hintText: "用户名或邮箱",
-                              icon: Icon(Icons.person),
-                              suffixIcon: IconButton(
-                                  icon: Icon(
-                                    Icons.clear,
-                                    color: Colors.black45,
-                                  ),
-                                  onPressed: () {
-                                    _nameController.clear();
-                                  })),
-                          // 校验用户名
-                          validator: (v) {
-                            return v.trim().length > 0 ? null : "用户名不能为空";
-                          }),
+                        autofocus: true,
+                        keyboardType: TextInputType.phone,
+                        controller: _nameController,
+                        decoration: InputDecoration(
+                            labelText: "用户名",
+                            hintText: "用户名或邮箱",
+                            icon: Icon(Icons.person),
+                            suffixIcon: IconButton(
+                                icon: Icon(
+                                  Icons.clear,
+                                  color: Colors.black45,
+                                ),
+                                onPressed: () {
+                                  _nameController.clear();
+                                })),
+                        // 校验用户名
+                        validator: (v) {
+                          return v.trim().length > 0 ? null : "用户名不能为空";
+                        },
+                        //监听
+                        onChanged: (value) {
+                          print(value);
+                        },
+                      ),
                       TextFormField(
                           controller: _pwdController,
                           decoration: InputDecoration(
