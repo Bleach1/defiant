@@ -125,4 +125,10 @@ class Web extends Person {
 void main() {
   //Person person = new Person(10, 4);
   //person.area;
+
+  //时间戳
+  var timeStamp = DateTime.now().millisecondsSinceEpoch;
+  //时间戳转时间
+  var dateTime=DateTime.fromMicrosecondsSinceEpoch(timeStamp);
+  //date_format
 }

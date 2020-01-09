@@ -6,7 +6,8 @@ class TextFieldPage extends StatefulWidget {
 }
 
 class _TextFieldPageState extends State<TextFieldPage> {
-  var flag=false;
+  var flag = false;
+  var sex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +53,32 @@ class _TextFieldPageState extends State<TextFieldPage> {
                 title: Text("sd"),
                 subtitle: Text("dsdsdss"),
                 secondary: Icon(Icons.ring_volume),
+              ),
+              Radio(
+                onChanged: (value) {
+                  setState(() {
+                    sex = value;
+                  });
+                },
+                value: 1,
+                groupValue: sex,
+              ),
+              Radio(
+                onChanged: (value) {
+                  setState(() {
+                    sex = value;
+                  });
+                },
+                value: 2,
+                groupValue: sex,
+              ),
+              Switch(
+                value: flag,
+                onChanged: (value) {
+                  setState(() {
+                    flag = !value;
+                  });
+                },
               ),
             ],
           ),
