@@ -56,6 +56,7 @@ class MinePageState extends State<MinePage> {
                 onPressed: () {},
                 icon: Icon(Icons.add_shopping_cart),
                 label: Text("ICON")),
+
             OutlineButton(
               child: Text("边框按钮"),
               //边框颜色
